@@ -1,1 +1,4 @@
+/os/target/
+/os/.gdb_history
+/.idea/
 /target
