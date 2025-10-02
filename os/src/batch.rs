@@ -57,9 +57,9 @@ struct AppManager {
 
 impl AppManager {
     pub fn print_app_info(&self) {
-        println!("[kernel] num_app = {}", self.num_app);
+        log::debug!("[kernel] num_app = {}", self.num_app);
         for i in 0..self.num_app {
-            println!(
+            log::debug!(
                 "[kernel] app_{} [{:#x}, {:#x})",
                 i,
                 self.app_start[i],
@@ -70,10 +70,10 @@ impl AppManager {
 
     fn load_app(&self, app_id: usize) {
         if app_id >= self.num_app {
-            println!("All applications completed!");
+            log::info!("All applications completed!");
             shutdown(false);
         }
-        println!("[kernel] Loading app_{}", app_id);
+        log::info!("[kernel] Loading app_{}", app_id);
         unsafe {
             // clear app area
             core::slice::from_raw_parts_mut(APP_BASE_ADDRESS as *mut u8, APP_SIZE_LIMIT).fill(0);
@@ -137,6 +137,7 @@ pub fn print_app_info() {
 pub fn run_next_app() -> ! {
     let mut app_manager = APP_MANAGER.exclusive_access();
     let current_app = app_manager.get_current_app();
+    let start_time = core::time::get_time();
     app_manager.load_app(current_app);
     app_manager.move_to_next_app();
     drop(app_manager);

@@ -10,6 +10,7 @@ mod sync;
 // pub mod syscall;
 pub mod trap;
 mod syscall;
+mod stack_trace;
 
 use core::arch::global_asm;
 
@@ -22,9 +23,9 @@ pub fn rust_main() -> ! {
     logging::init();
     log_system_info();
 
-    println!("Hello, world!");
-    // panic!("Shutdown machine!");
-    sbi::shutdown(true);
+    trap::init();
+    batch::init();
+    batch::run_next_app();
 }
 
 fn clear_bss() {
