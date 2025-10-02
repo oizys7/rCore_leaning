@@ -1,13 +1,20 @@
 #![no_main]
 #![no_std]
+#[macro_use]
 mod console;
+pub mod batch;
 mod lang_items;
-mod sbi;
 mod logging;
+mod sbi;
+mod sync;
+// pub mod syscall;
+pub mod trap;
+mod syscall;
 
 use core::arch::global_asm;
 
 global_asm!(include_str!("entry.asm"));
+global_asm!(include_str!("link_app.S"));
 
 #[unsafe(no_mangle)]
 pub fn rust_main() -> ! {
