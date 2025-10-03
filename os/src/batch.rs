@@ -137,7 +137,6 @@ pub fn print_app_info() {
 pub fn run_next_app() -> ! {
     let mut app_manager = APP_MANAGER.exclusive_access();
     let current_app = app_manager.get_current_app();
-    let start_time = core::time::get_time();
     app_manager.load_app(current_app);
     app_manager.move_to_next_app();
     drop(app_manager);
