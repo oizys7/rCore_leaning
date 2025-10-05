@@ -1,5 +1,6 @@
 const SYSCALL_WRITE: usize = 64;
 const SYSCALL_EXIT: usize = 93;
+const SYSCALL_YIELD: usize = 124;
 
 /// 功能：将内存中缓冲区中的数据写入文件。
 /// 参数：`fd` 表示待写入文件的文件描述符；
@@ -17,6 +18,14 @@ pub fn sys_write(fd: usize, buffer: &[u8]) -> isize {
 /// syscall ID：93
 pub fn sys_exit(xstate: i32) -> isize {
     syscall(SYSCALL_EXIT, [xstate as usize, 0, 0])
+}
+
+/// 功能：让出当前时间片，进入下一时间片。
+/// 参数：无
+/// 返回值：无
+/// syscall ID：124
+pub fn sys_yield() -> isize {
+    syscall(SYSCALL_YIELD, [0, 0, 0])
 }
 
 use core::arch::asm;

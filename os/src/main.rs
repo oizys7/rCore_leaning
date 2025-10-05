@@ -2,7 +2,6 @@
 #![no_std]
 #[macro_use]
 mod console;
-pub mod batch;
 mod lang_items;
 mod logging;
 mod sbi;
@@ -11,6 +10,9 @@ mod sync;
 pub mod trap;
 mod syscall;
 mod stack_trace;
+mod loader;
+mod task;
+mod config;
 
 use core::arch::global_asm;
 
@@ -24,8 +26,9 @@ pub fn rust_main() -> ! {
     log_system_info();
 
     trap::init();
-    batch::init();
-    batch::run_next_app();
+    loader::load_apps();
+    task::run_first_task();
+    panic!("Unreachable in rust_main!");
 }
 
 fn clear_bss() {
